@@ -23,12 +23,12 @@ class PreProcessor:
         text = re.sub(r"-[\r\n\t]+", "", text)
         text = re.sub(r"[\r\n\t]+", " ", text)
 
-        text = re.sub(r"(?<=[a-z])(\.\.|__)(?=[a-z])", " ", text)
-        text = re.sub(r"(?<=[a-z])(\.\.|__)", " ", text)
-        text = re.sub(r"(\.\.|__)(?=[a-z])", " ", text)
-        text = re.sub(r"(\.\.|__)", "", text)
+        for it in ("\.\.", "__", ": ", ":_", ":\."):
+            regex = r"(?<=[a-z])(" + it + ")(?=[a-z])"
+            text = re.sub(regex, " ", text)
 
         text = re.sub(r"\s+", " ", text)
+
         return text
 
     def normalize(self, text: str) -> str:
