@@ -20,6 +20,7 @@ class PreProcessor:
             return ""
 
         text = text.strip().lower()
+        text = re.sub(r"-[\r\n\t]+", "", text)
         text = re.sub(r"[\r\n\t]+", " ", text)
 
         text = re.sub(r"(?<=[a-z])(\.\.|__)(?=[a-z])", " ", text)
