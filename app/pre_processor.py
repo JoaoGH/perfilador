@@ -52,5 +52,5 @@ class PreProcessor:
     def execute_by_document(self, document: Document) -> None:
         document.clean = self.clear(document.content)
         document.normalized = self.normalize(document.clean)
-        document.tokenized = self.tokenize(document.normalized)
+        document.tokens = self.tokenize(document.normalized)
         document.pipeline_executed = True
