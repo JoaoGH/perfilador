@@ -8,7 +8,7 @@ def show_menu():
     print("3 - Pré-processamento")
     print("4 - Visualizar documentos carregados")
     print("5 - Executar pipeline completo em um documento")
-    print("5 - Sair")
+    print("6 - Sair")
 
 def main():
     manager = DocumentManager()
@@ -24,9 +24,9 @@ def main():
             manager.list_documents()
         elif opc == "4":
             print("Não implementado")
-        elif opc == "6":
-            print("Não implementado")
         elif opc == "5":
+            print("Não implementado")
+        elif opc == "6":
             print("Saindo")
             break
         else:
