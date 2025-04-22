@@ -10,12 +10,22 @@ import PyPDF2
 from app.document import Document
 
 class DocumentManager:
-    def __init__(self, pdf_folder: str = "resources/pdf"):
-        self.files: List[Document] = []
-        self.pdf_folder: Path = Path(pdf_folder)
+    _instance = None
+    _initialized = False
 
-        if not self.pdf_folder.exists():
-            raise FileNotFoundError(f"Diretório não encontrado '{self.pdf_folder}'")
+    def __new__(cls, pdf_folder: str = "resources/pdf"):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self, pdf_folder: str = "resources/pdf"):
+        if not self._initialized:
+            self.files: List[Document] = []
+            self.pdf_folder: Path = Path(pdf_folder)
+            self._initialized = True
+
+            if not self.pdf_folder.exists():
+                raise FileNotFoundError(f"Diretório não encontrado '{self.pdf_folder}'")
 
     def load_pdf(self) -> None:
         """Carrega todos os PDFs do diretório especificado com barra de progresso."""
