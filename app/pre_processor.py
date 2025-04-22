@@ -30,7 +30,14 @@ class PreProcessor:
         if not text:
             return ""
 
+        # Tabela de tradução
+        translation_table = str.maketrans(
+            'áàâãäéèêëíìîïóòôõöúùûüç',
+            'aaaaaeeeeiiiiooooouuuuc'
+        )
+
         text = unicodedata.normalize("NFKC", text)
+        text = text.translate(translation_table)
         text = text.encode("ascii", "ignore").decode("ascii")
         text = re.sub(r"[^\w\s]", "", text)
         return text
