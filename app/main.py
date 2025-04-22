@@ -1,5 +1,5 @@
 from app.document_manager import DocumentManager
-
+from app.pre_processor import PreProcessor
 
 def show_menu():
     print("\n=== MENU PRINCIPAL ===")
@@ -21,9 +21,10 @@ def main():
         elif opc == "2":
             print("Não implementado")
         elif opc == "3":
-            manager.list_documents()
+            preprocessor = PreProcessor()
+            preprocessor.execute()
         elif opc == "4":
-            print("Não implementado")
+            manager.list_documents()
         elif opc == "5":
             print("Não implementado")
         elif opc == "6":
