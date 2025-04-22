@@ -49,7 +49,16 @@ class PreProcessor:
         return text
 
     def tokenize(self, text: str) -> list:
-        return nltk.word_tokenize(text)
+        """Tokeniza o conteudo usando NLTK"""
+
+        if not text:
+            return []
+
+        try:
+            return nltk.word_tokenize(text)
+        except Exception as e:
+            print(f"Erro ao tokenizar: {str(e)}")
+            return []
 
     def execute(self) -> None:
         for file in self.document_manager.files:
