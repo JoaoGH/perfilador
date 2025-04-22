@@ -1,11 +1,10 @@
+import re
 import sys
 import time
-import warnings
 from pathlib import Path
 from threading import Event, Thread
 from typing import List, Optional
-
-import PyPDF2
+import fitz
 
 from app.document import Document
 
@@ -82,25 +81,31 @@ class DocumentManager:
             print(f"Erro durante o carregamento: {str(e)}")
 
     def read_file(self, path: Path) -> Optional[str]:
-        content = []
+        """Extrai conteudo do PDF"""
 
         try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                with open(path, "rb") as file:
-                    reader = PyPDF2.PdfReader(file)
+            text = ""
+            with fitz.open(path) as doc:
+                for page in doc:
+                    text += page.get_text("text") + "\n"
 
-                    for page in reader.pages:
-                        text = page.extractText() or ""
-                        if text.strip():
-                            content.append(text)
+            text = self.remover_anuncios(text)
+
+            return text
+
         except Exception as e:
-            print(f"Erro ao ler '{path.name}': {str(e)}")
-            return None
-
-        return "\n".join(content) if content else None
+            print(f"Erro ao ler {path}: {str(e)}")
+            return ""
 
     def list_documents(self) -> None:
         for idx, doc in enumerate(self.files):
             status = "✓" if doc.pipeline_executed else "⌛"
             print(f"[{(idx+1):02d}] {status} - {doc.name}")
+
+    def remover_anuncios(self, text) -> str:
+        """Remover anuncio do editor de PDF gratuito usado para preencher os arquivos"""
+
+        anuncio = r"(P\nD\nF\n-\nX\nC\nh\na\nn\ng\ne\nE\nd\ni\nt\no\nr\nw\nw\nw\n.\np\nd\nf\n-\nx\nc\nh\na\nn\ng\ne\n.\nc\no\nm)+"
+        text = re.sub(anuncio, "", text)
+        text = re.sub(r"(Click to BUY NOW!)+", "", text)
+        return text
