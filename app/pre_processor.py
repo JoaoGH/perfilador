@@ -14,12 +14,15 @@ class PreProcessor:
         self.document_manager = DocumentManager()
 
     def clear(self, text: str) -> str:
-        return re.sub(r"[\r\n]+", " ", text).lower()
+        """Executa todas as operações de limpeza básica do texto"""
+        text = text.strip().lower()
+        text = re.sub(r"[\r\n\t]+", " ", text)
+        text = re.sub(r"\s+", " ", text)
+        return text
 
     def normalize(self, text: str) -> str:
         text = unicodedata.normalize("NFKC", text)
         text = text.encode("ascii", "ignore").decode("utf-8")
-        text = text.lower()
         text = re.sub(r"[^\w\s]", "", text)
         return text
 
