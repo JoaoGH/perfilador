@@ -44,8 +44,8 @@ class PreProcessor:
 
         # Tabela de tradução
         translation_table = str.maketrans(
-            'áàâãäéèêëíìîïóòôõöúùûüç',
-            'aaaaaeeeeiiiiooooouuuuc'
+            'áàâãäéèêëíìîïóòôõöúùûüçñ',
+            'aaaaaeeeeiiiiooooouuuucn'
         )
 
         text = unicodedata.normalize("NFKC", text)
