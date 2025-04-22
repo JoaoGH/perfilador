@@ -27,6 +27,11 @@ class PreProcessor:
             regex = r"(?<=[a-z])(" + it + ")(?=[a-z])"
             text = re.sub(regex, " ", text)
 
+        text = re.sub(r"(?<!\s)\(", " (", text)
+        text = re.sub(r"\)(?!\s)", ") ", text)
+
+        text = re.sub(r"_", " ", text)
+
         text = re.sub(r"\s+", " ", text)
 
         return text
