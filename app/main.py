@@ -3,7 +3,7 @@ from app.document_manager import DocumentManager
 
 def show_menu():
     print("\n=== MENU PRINCIPAL ===")
-    print("1 - opção")
+    print("1 - Carregar arquivos PDF")
     print("2 - Coleta de informações")
     print("3 - Pré-processamento")
     print("4 - Visualizar documentos carregados")
@@ -12,13 +12,12 @@ def show_menu():
 
 def main():
     manager = DocumentManager()
-    manager.load_pdf()
 
     while True:
         show_menu()
         opc = input("Escolha uma opção: ")
         if opc == "1":
-            print("Não implementado")
+            manager.load_pdf()
         elif opc == "2":
             print("Não implementado")
         elif opc == "3":
