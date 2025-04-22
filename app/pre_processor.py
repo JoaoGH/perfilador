@@ -15,12 +15,21 @@ class PreProcessor:
 
     def clear(self, text: str) -> str:
         """Executa todas as operações de limpeza básica do texto"""
+
+        if not text:
+            return ""
+
         text = text.strip().lower()
         text = re.sub(r"[\r\n\t]+", " ", text)
         text = re.sub(r"\s+", " ", text)
         return text
 
     def normalize(self, text: str) -> str:
+        """Executa a normalização do texto"""
+
+        if not text:
+            return ""
+
         text = unicodedata.normalize("NFKC", text)
         text = text.encode("ascii", "ignore").decode("ascii")
         text = re.sub(r"[^\w\s]", "", text)
