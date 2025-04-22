@@ -21,6 +21,12 @@ class PreProcessor:
 
         text = text.strip().lower()
         text = re.sub(r"[\r\n\t]+", " ", text)
+
+        text = re.sub(r"(?<=[a-z])(\.\.|__)(?=[a-z])", " ", text)
+        text = re.sub(r"(?<=[a-z])(\.\.|__)", " ", text)
+        text = re.sub(r"(\.\.|__)(?=[a-z])", " ", text)
+        text = re.sub(r"(\.\.|__)", "", text)
+
         text = re.sub(r"\s+", " ", text)
         return text
 
