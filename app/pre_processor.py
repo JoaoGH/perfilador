@@ -51,7 +51,6 @@ class PreProcessor:
         text = unicodedata.normalize("NFKC", text)
         text = text.translate(translation_table)
         text = text.encode("ascii", "ignore").decode("ascii")
-        text = re.sub(r"(?<!\d)[^\w\s]|[^\w\s](?!\d)", "", text)
 
         return text
 
