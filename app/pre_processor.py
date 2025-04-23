@@ -61,7 +61,20 @@ class PreProcessor:
             return []
 
         try:
-            return nltk.word_tokenize(text)
+            regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            emails = re.findall(regex_email, text)
+            protected_text = re.sub(regex_email, '||EMAIL||', text)
+
+            content = nltk.word_tokenize(protected_text)
+
+            email_index = 0
+
+            for token in content:
+                if token == '||EMAIL||':
+                    content[content.index(token)] = emails[email_index]
+                    email_index += 1
+
+            return content
         except Exception as e:
             print(f"Erro ao tokenizar: {str(e)}")
             return []
