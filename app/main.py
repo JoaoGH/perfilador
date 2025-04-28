@@ -1,4 +1,5 @@
 from app.document_manager import DocumentManager
+from app.information_extractor import InformationExtractor
 from app.pre_processor import PreProcessor
 
 def show_menu():
@@ -12,6 +13,8 @@ def show_menu():
 
 def main():
     manager = DocumentManager()
+    preprocessor = PreProcessor()
+    infoextractor = InformationExtractor()
 
     while True:
         show_menu()
@@ -21,12 +24,12 @@ def main():
         elif opc == "2":
             print("Não implementado")
         elif opc == "3":
-            preprocessor = PreProcessor()
             preprocessor.execute()
         elif opc == "4":
             manager.list_documents()
         elif opc == "5":
-            print("Não implementado")
+            manager.list_documents()
+            infoextractor.execute(preprocessor)
         elif opc == "6":
             print("Saindo")
             break
