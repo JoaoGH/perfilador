@@ -49,9 +49,34 @@ class InformationExtractor:
         if not document.normalized:
             return []
 
-        results = self.ner_pipeline(document.normalized)
+        entities = self.ner_pipeline(document.normalized)
 
-        return results
+        entities = self.merge_adjacent_entities(entities)
+
+        return entities
+
+    def merge_adjacent_entities(self, entities):
+        if not entities:
+            return []
+
+        merged = []
+        current = entities[0].copy()
+
+        for entity in entities[1:]:
+            # Verifica se a entidade atual é adjacente à anterior
+            if entity['start'] == current['end']:
+                current['word'] += entity['word'].replace('##', '')  # Remove ## se existir
+                current['end'] = entity['end']
+                current['score'] = (current['score'] + entity['score']) / 2  # Média dos scores
+            else:
+                # Adiciona a entidade atual ao resultado e começa uma nova
+                merged.append(current)
+                current = entity.copy()
+
+        # Adiciona a última entidade processada
+        merged.append(current)
+
+        return merged
 
     def extract_relations(self, document: Document, entities: List[str]) -> List[str]:
         """
