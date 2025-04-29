@@ -18,7 +18,11 @@ class InformationExtractor:
         """Carrega o modelo e tokenizador do diretório informado"""
         self._verify_model_files()
 
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
+        self.tokenizer = AutoTokenizer.from_pretrained(
+            self.model_path,
+            truncation=True,
+            max_length=512,
+            model_max_length=512)
         self.model = AutoModelForTokenClassification.from_pretrained(self.model_path)
         self.ner_pipeline = pipeline(
             "ner",
