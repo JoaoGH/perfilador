@@ -5,7 +5,7 @@ from sqlite3 import Connection
 class DatabaseConnection:
     _instance = None
 
-    def __init__(self, db_path: str = "resources/database/perfilador.db"):
+    def __init__(self, db_path: str = "resources/database/perfilador.sqlite"):
         """Inicializa a conexão com o banco de dados"""
         self.db_path = db_path
         self.connection: Connection = sqlite3.connect(self.db_path)
