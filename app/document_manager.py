@@ -105,10 +105,10 @@ class DocumentManager:
 
         print(f"{'ID':<4} | {'Pipeline':<8} | {'Information':<11} | Nome Documento")
         print("-"*48)
-        for idx, doc in enumerate(self.files):
+        for idx, doc in enumerate(self.files, start=1):
             status_pipeline = "✓" if doc.pipeline_executed else "⌛"
             status_information = "✓" if doc.information_extracted else "⌛"
-            print(f"{(idx+1):>4} | {status_pipeline:^8} | {status_information:^11} | {doc.name}")
+            print(f"{idx:>4} | {status_pipeline:^8} | {status_information:^11} | {doc.name}")
 
     def remover_anuncios(self, text) -> str:
         """Remover anuncio do editor de PDF gratuito usado para preencher os arquivos"""
