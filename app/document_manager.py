@@ -30,6 +30,8 @@ class DocumentManager:
         """Carrega todos os PDFs do diretório especificado com barra de progresso."""
         pdf_files = list(self.pdf_folder.glob("*.pdf"))
 
+        pdf_files = sorted(pdf_files, key=lambda x: x.name)
+
         if not pdf_files:
             print(f"Nenhum arquivo PDF encontrado no diretório '{self.pdf_folder}'.")
             return

@@ -3,6 +3,7 @@ from typing import List
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 
+from app.dao.identidade_dao import IdentidadeDAO
 from app.document import Document
 from app.document_manager import DocumentManager
 from app.model.identidade import Identidade
@@ -116,6 +117,17 @@ class InformationExtractor:
 
         return relations
 
+    def _save_extracted_identities(self, relations: List[Identidade]):
+        dao = IdentidadeDAO()
+        for relation in relations:
+            filtred_relation = {k: v for k, v in relation.to_dict().items() if v}
+            try:
+                dao.insert(filtred_relation)
+            except Exception as e:
+                print(f"Erro ao salvar: {e}")
+
+        return
+
     def execute(self, preprocessor: PreProcessor) -> None:
         doc_index = int(input("Digite o índice do documento: "))
 
@@ -137,3 +149,5 @@ class InformationExtractor:
         print("\nRelações encontradas:")
         for rel in relations:
             print(rel)
+
+        self._save_extracted_identities(relations)
