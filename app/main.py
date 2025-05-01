@@ -9,7 +9,8 @@ def show_menu():
     print("3 - Pré-processamento")
     print("4 - Visualizar documentos carregados")
     print("5 - Executar pipeline completo em um documento")
-    print("6 - Sair")
+    print("6 - Aplicar extração de informações em todos os arquivos")
+    print("7 - Sair")
 
 def main():
     manager = DocumentManager()
@@ -29,8 +30,10 @@ def main():
             manager.list_documents()
         elif opc == "5":
             manager.list_documents()
-            infoextractor.execute(preprocessor)
+            infoextractor.execute_by_document(preprocessor)
         elif opc == "6":
+            infoextractor.execute_for_all(preprocessor)
+        elif opc == "7":
             print("Saindo")
             break
         else:

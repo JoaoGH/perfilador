@@ -117,26 +117,39 @@ class InformationExtractor:
 
         return relations
 
-    def _save_extracted_identities(self, relations: List[Identidade]):
+    def _save_extracted_identities(self, relations: List[Identidade]) -> bool:
         dao = IdentidadeDAO()
+        success = False
         for relation in relations:
             filtred_relation = {k: v for k, v in relation.to_dict().items() if v}
             try:
                 id = dao.insert(filtred_relation)
                 print(f"Registro salvo com ID '{id}' na tabela '{dao.table_name}'")
+                success = True
             except Exception as e:
                 print(f"Erro ao salvar: {e}")
 
-        return
+        return success
 
-    def execute(self, preprocessor: PreProcessor) -> None:
+    def execute_by_document(self, preprocessor: PreProcessor) -> None:
         doc_index = int(input("Digite o índice do documento: "))
 
         if len(self.document_manager.files) < doc_index:
             print(f"Não há arquivo com index '{doc_index}'.")
             return
 
+        self.execute(doc_index, preprocessor)
+
+    def execute_for_all(self, preprocessor: PreProcessor) -> None:
+        for index, document in enumerate(self.document_manager.files):
+            self.execute(index+1, preprocessor)
+
+    def execute(self, doc_index: int, preprocessor: PreProcessor) -> None:
         selected_doc = self.document_manager.files[doc_index - 1]
+
+        if selected_doc.information_extracted:
+            return
+
         preprocessor.execute_by_document(selected_doc)
 
         entities = self.extract_entities(selected_doc)
@@ -146,4 +159,7 @@ class InformationExtractor:
         print(f"{len(entities)} entidades encontradas")
         print(f"{len(relations)} relações encontradas")
 
-        self._save_extracted_identities(relations)
+        success = self._save_extracted_identities(relations)
+
+        if success:
+            selected_doc.information_extracted = True
