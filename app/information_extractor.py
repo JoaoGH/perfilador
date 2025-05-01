@@ -122,7 +122,8 @@ class InformationExtractor:
         for relation in relations:
             filtred_relation = {k: v for k, v in relation.to_dict().items() if v}
             try:
-                dao.insert(filtred_relation)
+                id = dao.insert(filtred_relation)
+                print(f"Registro salvo com ID '{id}' na tabela '{dao.table_name}'")
             except Exception as e:
                 print(f"Erro ao salvar: {e}")
 
@@ -142,12 +143,7 @@ class InformationExtractor:
         relations = self.extract_relations(selected_doc, entities)
 
         print(f"Documento: [{doc_index:02d}] - {selected_doc.name}")
-        print("\nEntidades encontradas:")
-        for ent in entities:
-            print(ent)
-
-        print("\nRelações encontradas:")
-        for rel in relations:
-            print(rel)
+        print(f"{len(entities)} entidades encontradas")
+        print(f"{len(relations)} relações encontradas")
 
         self._save_extracted_identities(relations)
