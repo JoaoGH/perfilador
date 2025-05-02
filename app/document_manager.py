@@ -6,7 +6,7 @@ from threading import Event, Thread
 from typing import List, Optional
 import fitz
 
-from app.document import Document
+from app.model.document import Document
 
 class DocumentManager:
     _instance = None

@@ -4,7 +4,7 @@ from typing import List
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 
 from app.dao.identidade_dao import IdentidadeDAO
-from app.document import Document
+from app.model.document import Document
 from app.document_manager import DocumentManager
 from app.model.identidade import Identidade
 from app.pre_processor import PreProcessor
