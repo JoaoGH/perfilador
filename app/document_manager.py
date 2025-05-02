@@ -6,7 +6,7 @@ from threading import Event, Thread
 from typing import List, Optional
 import fitz
 
-from app.document import Document
+from app.model.document import Document
 
 class DocumentManager:
     _instance = None
@@ -29,6 +29,8 @@ class DocumentManager:
     def load_pdf(self) -> None:
         """Carrega todos os PDFs do diretório especificado com barra de progresso."""
         pdf_files = list(self.pdf_folder.glob("*.pdf"))
+
+        pdf_files = sorted(pdf_files, key=lambda x: x.name)
 
         if not pdf_files:
             print(f"Nenhum arquivo PDF encontrado no diretório '{self.pdf_folder}'.")
@@ -98,9 +100,15 @@ class DocumentManager:
             return ""
 
     def list_documents(self) -> None:
-        for idx, doc in enumerate(self.files):
-            status = "✓" if doc.pipeline_executed else "⌛"
-            print(f"[{(idx+1):02d}] {status} - {doc.name}")
+        if len(self.files) == 0:
+            return
+
+        print(f"{'ID':<4} | {'Pipeline':<8} | {'Information':<11} | Nome Documento")
+        print("-"*48)
+        for idx, doc in enumerate(self.files, start=1):
+            status_pipeline = "✓" if doc.pipeline_executed else "⌛"
+            status_information = "✓" if doc.information_extracted else "⌛"
+            print(f"{idx:>4} | {status_pipeline:^8} | {status_information:^11} | {doc.name}")
 
     def remover_anuncios(self, text) -> str:
         """Remover anuncio do editor de PDF gratuito usado para preencher os arquivos"""

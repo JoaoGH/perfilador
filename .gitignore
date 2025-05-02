@@ -1,0 +1,6 @@
+.idea
+app/__pycache__/
+/resources/models/**
+!/resources/models/.gitkeep
+/resources/pdf/**
+!/resources/pdf/.gitkeep

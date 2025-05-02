@@ -10,3 +10,4 @@ class Document:
         self.normalized: str = ""
         self.tokens: List[str] = []
         self.pipeline_executed: bool = False
+        self.information_extracted: bool = False

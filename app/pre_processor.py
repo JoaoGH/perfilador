@@ -2,7 +2,7 @@ import re
 import unicodedata
 import nltk
 
-from app.document import Document
+from app.model.document import Document
 from app.document_manager import DocumentManager
 
 
