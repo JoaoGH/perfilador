@@ -99,6 +99,7 @@ class InformationExtractor:
         for group in groups:
             identity = Identidade()
             identity.process_entity(group)
+            identity.document = document
             relations.append(identity)
 
         return relations
@@ -122,9 +123,8 @@ class InformationExtractor:
         dao = IdentidadeDAO()
         success = False
         for relation in relations:
-            filtred_relation = {k: v for k, v in relation.to_dict().items() if v}
             try:
-                id = dao.insert(filtred_relation)
+                id = dao.insert(relation)
                 print(f"Registro salvo com ID '{id}' na tabela '{dao.table_name}'")
                 success = True
             except Exception as e:

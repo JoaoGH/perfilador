@@ -1,3 +1,4 @@
+from app.model.document import Document
 from app.model.endereco import Endereco
 
 
@@ -9,9 +10,10 @@ class Identidade:
         self.orgao_emissor = None
         self.data_nascimento = None
         self.email = None
-        self.endereco = Endereco()
+        self.endereco: Endereco = Endereco()
         self.telefone = None
         self.profissao = None
+        self.document: Document = Document()
 
     def process_entity(self, entities) -> None:
         for ent in entities:
@@ -61,13 +63,10 @@ class Identidade:
             "rg_orgao_emissor": self.orgao_emissor,
             "data_nascimento": self.data_nascimento,
             "email": self.email,
-            "endereco": self.endereco.formatado() if self.endereco else None,
+            "endereco": self.endereco.formatado() if self.endereco.hasValue() else None,
             "telefone": self.telefone,
-            "profissao": str(self.profissao)
-
+            "profissao": str(self.profissao) if self.profissao else None,
+            "documento_id": self.document.id,
         }
-
-        if self.endereco.hasValue():
-            dictionary["endereco"] = self.endereco.formatado()
 
         return dictionary
