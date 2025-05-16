@@ -58,7 +58,6 @@ class BaseDAO(ABC, Generic[T]):
         query = f"UPDATE {self.table_name} SET {fields} WHERE id = {id}"
 
         values = list(data.values())
-        values.append(id)
 
         cursor = self.conn.cursor()
         cursor.execute(query, tuple(values))
