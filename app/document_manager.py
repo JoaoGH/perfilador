@@ -6,6 +6,7 @@ from threading import Event, Thread
 from typing import List, Optional
 import fitz
 
+from app.dao.documentos_dao import DocumentoDao
 from app.model.document import Document
 
 class DocumentManager:
@@ -26,6 +27,18 @@ class DocumentManager:
             if not self.pdf_folder.exists():
                 raise FileNotFoundError(f"Diretório não encontrado '{self.pdf_folder}'")
 
+    def load_from_database(self) -> None:
+
+        try:
+            dao = DocumentoDao()
+            documents = dao.list()
+            for document in documents:
+                self.files.append(document)
+        except Exception as e:
+            print(e)
+
+        return
+
     def load_pdf(self) -> None:
         """Carrega todos os PDFs do diretório especificado com barra de progresso."""
         pdf_files = list(self.pdf_folder.glob("*.pdf"))
@@ -36,7 +49,6 @@ class DocumentManager:
             print(f"Nenhum arquivo PDF encontrado no diretório '{self.pdf_folder}'.")
             return
 
-        loaded_files = {doc.name for doc in self.files}
         stop_loading = Event()
         progress = {'current': 0, 'total': len(pdf_files)}
 
@@ -55,14 +67,18 @@ class DocumentManager:
 
         try:
             new_files_count = 0
+            dao = DocumentoDao()
+
             for i, pdf_file in enumerate(pdf_files):
                 file_name = pdf_file.name
-                if file_name in loaded_files:
-                    continue
 
                 try:
                     doc = Document(file_name, str(pdf_file))
                     doc.content = self.read_file(pdf_file)
+                    doc.calculate_hash()
+                    if dao.exists_by_hash(doc.hash):
+                        continue
+                    doc.id = dao.insert(doc)
                     self.files.append(doc)
                     new_files_count += 1
                 except Exception as e:

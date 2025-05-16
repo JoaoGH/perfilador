@@ -3,6 +3,7 @@ from typing import List
 
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 
+from app.dao.documentos_dao import DocumentoDao
 from app.dao.identidade_dao import IdentidadeDAO
 from app.model.document import Document
 from app.document_manager import DocumentManager
@@ -163,3 +164,5 @@ class InformationExtractor:
 
         if success:
             selected_doc.information_extracted = True
+            dao = DocumentoDao()
+            dao.update(selected_doc.id, selected_doc.to_dict())

@@ -12,8 +12,15 @@ class BaseDAO(ABC, Generic[T]):
         self.model_class = model_class
         self.table_name = model_class.get_table_name()
 
-    def insert(self, data: Dict) -> int:
+    def insert(self, entity: T) -> int:
         """Cria novo registro no banco"""
+
+        if hasattr(entity, 'to_dict'):
+            data = entity.to_dict()
+        else:
+            data = {key: getattr(entity, key) for key in dir(entity) if not key.startswith('_') and not callable(getattr(entity, key))}
+
+        data.pop("id", None)
 
         fields = ", ".join(data.keys())
         placeholders = ", ".join(['?'] * len(data.keys()))
@@ -74,12 +81,31 @@ class BaseDAO(ABC, Generic[T]):
 
         return cursor.rowcount > 0
 
+    def _get_conversion_map(self) -> dict:
+        """
+        Deve retornar um dicionário com as regras de conversão para campos especiais.
+        Por padrão retorna um dicionário vazio. Se necessário deve ser sobrescrito por DAOs específicos.
+        Formato: {'nome_do_campo': função_de_conversão}
+        """
+        return {}
+
     def _row_to_model(self, row: sqlite3.Row) -> T:
         """Converte a linha do banco de dados para o modelo"""
 
         model = self.model_class()
 
+        conversion_map = self._get_conversion_map()
+
         for key in row.keys():
-            setattr(model, key, row[key])
+            value = row[key]
+
+            if key in conversion_map:
+                try:
+                    value = conversion_map[key](value)
+                except Exception as e:
+                    print(f"Erro ao converter campo {key}: {e}")
+                    value = getattr(model, key)
+
+            setattr(model, key, value)
 
         return model
