@@ -1,13 +1,16 @@
 import sqlite3
 from abc import ABC
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, TypeVar, Type, Generic
 
 from app.database.database_connection import DatabaseConnection
 
-class BaseDAO(ABC):
-    def __init__(self, table_name: str = None):
+T = TypeVar('T')
+
+class BaseDAO(ABC, Generic[T]):
+    def __init__(self, model_class: Type[T]):
         self.conn = DatabaseConnection().get_instance().get_connection()
-        self.table_name = table_name
+        self.model_class = model_class
+        self.table_name = model_class.get_table_name()
 
     def insert(self, data: Dict) -> int:
         """Cria novo registro no banco"""
@@ -25,18 +28,25 @@ class BaseDAO(ABC):
         except Exception as e:
             print("Erro ao salvar registro no banco: " + str(e))
 
-    def get(self, id: int) -> Optional[sqlite3.Row]:
+    def get(self, id: int) -> Optional[T]:
         """Buscar regitro pelo ID"""
         query = f"SELECT * FROM {self.table_name} WHERE id = {id}"
         cursor = self.conn.cursor()
+        cursor.execute(query)
         row = cursor.fetchone()
-        return row
 
-    def list(self, limit: int = 50, offset: int = 0) -> List[Dict]:
+        if row:
+            return self._row_to_model(row)
+
+        return None
+
+    def list(self, limit: int = 50, offset: int = 0) -> List[T]:
         """Listar registros no banco"""
         query = f"SELECT * FROM {self.table_name} ORDER BY id LIMIT ? OFFSET ?"
         cursor = self.conn.execute(query, (limit, offset))
-        return cursor.fetchall()
+        rows = cursor.fetchall()
+
+        return [self._row_to_model(row) for row in rows]
 
     def update(self, id: int, data: Dict) -> bool:
         """Atualizar registro no banco"""
@@ -64,3 +74,13 @@ class BaseDAO(ABC):
         self.conn.commit()
 
         return cursor.rowcount > 0
+
+    def _row_to_model(self, row: sqlite3.Row) -> T:
+        """Converte a linha do banco de dados para o modelo"""
+
+        model = self.model_class()
+
+        for key in row.keys():
+            setattr(model, key, row[key])
+
+        return model
