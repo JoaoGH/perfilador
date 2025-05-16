@@ -49,6 +49,10 @@ class Identidade:
                         self.profissao = []
                     self.profissao.append(valor)
 
+    @staticmethod
+    def get_table_name() -> str:
+        return "identidades"
+
     def to_dict(self):
         dictionary = {
             "nome": self.nome,
