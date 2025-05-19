@@ -14,6 +14,7 @@ def show_menu():
 
 def main():
     manager = DocumentManager()
+    manager.load_from_database()
     preprocessor = PreProcessor()
     infoextractor = InformationExtractor()
 

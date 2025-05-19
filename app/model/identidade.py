@@ -1,17 +1,19 @@
+from app.model.document import Document
 from app.model.endereco import Endereco
-from app.model.registro_geral import RegistroGeral
 
 
 class Identidade:
     def __init__(self):
         self.nome = None
         self.cpf = None
-        self.rg = RegistroGeral()
+        self.rg = None
+        self.orgao_emissor = None
         self.data_nascimento = None
         self.email = None
-        self.endereco = Endereco()
+        self.endereco: Endereco = Endereco()
         self.telefone = None
         self.profissao = None
+        self.document: Document = Document()
 
     def process_entity(self, entities) -> None:
         for ent in entities:
@@ -23,9 +25,9 @@ class Identidade:
                 case "cpf":
                     self.cpf = valor
                 case "id":
-                    self.rg.numero = valor
+                    self.rg = valor
                 case "id_issuer":
-                    self.rg.orgao_emissor = valor
+                    self.orgao_emissor = valor
                 case "birthday":
                     self.data_nascimento = valor
                 case "email":
@@ -49,23 +51,22 @@ class Identidade:
                         self.profissao = []
                     self.profissao.append(valor)
 
+    @staticmethod
+    def get_table_name() -> str:
+        return "identidades"
+
     def to_dict(self):
         dictionary = {
             "nome": self.nome,
             "cpf": self.cpf,
-            "rg": self.rg.formatado() if self.rg.numero else None,
+            "rg": self.rg,
+            "rg_orgao_emissor": self.orgao_emissor,
             "data_nascimento": self.data_nascimento,
             "email": self.email,
-            "endereco": self.endereco.formatado() if self.endereco else None,
+            "endereco": self.endereco.formatado() if self.endereco.hasValue() else None,
             "telefone": self.telefone,
-            "profissao": str(self.profissao)
-
+            "profissao": str(self.profissao) if self.profissao else None,
+            "documento_id": self.document.id,
         }
-
-        if self.rg.numero is not None:
-            dictionary["rg"] = self.rg.formatado()
-
-        if self.endereco.hasValue():
-            dictionary["endereco"] = self.endereco.formatado()
 
         return dictionary

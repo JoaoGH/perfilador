@@ -2,6 +2,7 @@ import re
 import unicodedata
 import nltk
 
+from app.dao.documentos_dao import DocumentoDao
 from app.model.document import Document
 from app.document_manager import DocumentManager
 
@@ -92,4 +93,6 @@ class PreProcessor:
         document.tokens = self.tokenize(document.normalized)
 
         if document.clean and document.normalized and document.tokens:
+            dao = DocumentoDao()
             document.pipeline_executed = True
+            dao.update(document.id, document.to_dict())
