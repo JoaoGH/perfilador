@@ -46,7 +46,6 @@ class Identidade:
             "rg_orgao_emissor": self.orgao_emissor,
             "data_nascimento": self.data_nascimento,
             "email": self.email,
-            "endereco": self.endereco.formatado() if self.endereco.hasValue() else None,
             "endereco_id": self.endereco.id if self.endereco.hasValue() else None,
             "telefone": self.telefone,
             "documento_id": self.document.id,
