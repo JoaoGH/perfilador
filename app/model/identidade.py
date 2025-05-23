@@ -12,7 +12,6 @@ class Identidade:
         self.email = None
         self.endereco: Endereco = Endereco()
         self.telefone = None
-        self.profissao = None
         self.document: Document = Document()
 
     def process_entity(self, entities) -> None:
@@ -34,10 +33,6 @@ class Identidade:
                     self.email = valor
                 case "phone":
                     self.telefone = valor
-                case "professional_id":
-                    if self.profissao is None:
-                        self.profissao = []
-                    self.profissao.append(valor)
 
     @staticmethod
     def get_table_name() -> str:
@@ -54,7 +49,6 @@ class Identidade:
             "endereco": self.endereco.formatado() if self.endereco.hasValue() else None,
             "endereco_id": self.endereco.id if self.endereco.hasValue() else None,
             "telefone": self.telefone,
-            "profissao": str(self.profissao) if self.profissao else None,
             "documento_id": self.document.id,
         }
 
