@@ -4,9 +4,11 @@ from typing import List
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 
 from app.dao.documentos_dao import DocumentoDao
+from app.dao.endereco_dao import EnderecoDAO
 from app.dao.identidade_dao import IdentidadeDAO
 from app.model.document import Document
 from app.document_manager import DocumentManager
+from app.model.endereco import Endereco
 from app.model.identidade import Identidade
 from app.pre_processor import PreProcessor
 
@@ -97,9 +99,12 @@ class InformationExtractor:
         groups = self._group_by_identity(entities)
 
         for group in groups:
+            address = Endereco()
+            address.process_entity(group)
             identity = Identidade()
             identity.process_entity(group)
             identity.document = document
+            identity.endereco = address
             relations.append(identity)
 
         return relations
@@ -121,9 +126,13 @@ class InformationExtractor:
 
     def _save_extracted_identities(self, relations: List[Identidade]) -> bool:
         dao = IdentidadeDAO()
+        daoEndereco = EnderecoDAO()
         success = False
         for relation in relations:
             try:
+                if relation.endereco.hasValue():
+                    enderecoId = daoEndereco.insert(relation.endereco)
+                    relation.endereco.id = enderecoId
                 id = dao.insert(relation)
                 print(f"Registro salvo com ID '{id}' na tabela '{dao.table_name}'")
                 success = True

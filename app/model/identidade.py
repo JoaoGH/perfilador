@@ -32,18 +32,6 @@ class Identidade:
                     self.data_nascimento = valor
                 case "email":
                     self.email = valor
-                case "address":
-                    self.endereco.logradouro = valor
-                case "number_a":
-                    self.endereco.numero = valor
-                case "city":
-                    self.endereco.cidade = valor
-                case "district":
-                    self.endereco.bairro = valor
-                case "postal":
-                    self.endereco.cep = valor
-                case "uf":
-                    self.endereco.uf = valor
                 case "phone":
                     self.telefone = valor
                 case "professional_id":
@@ -64,6 +52,7 @@ class Identidade:
             "data_nascimento": self.data_nascimento,
             "email": self.email,
             "endereco": self.endereco.formatado() if self.endereco.hasValue() else None,
+            "endereco_id": self.endereco.id if self.endereco.hasValue() else None,
             "telefone": self.telefone,
             "profissao": str(self.profissao) if self.profissao else None,
             "documento_id": self.document.id,

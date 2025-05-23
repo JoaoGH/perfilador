@@ -11,6 +11,7 @@ class Endereco:
         cep: Optional[str] = None,
         uf: Optional[str] = None
     ):
+        self.id = None
         self.logradouro = logradouro
         self.numero = numero
         self.cidade = cidade
@@ -38,3 +39,25 @@ class Endereco:
                 or self.cep is not None
                 or self.uf is not None
         )
+
+    @staticmethod
+    def get_table_name() -> str:
+        return "enderecos"
+
+    def process_entity(self, entities) -> None:
+        for ent in entities:
+            tipo = ent.get("entity_group", "").lower()
+            valor = ent["word"].strip()
+            match tipo:
+                case "address":
+                    self.logradouro = valor
+                case "number_a":
+                    self.numero = valor
+                case "city":
+                    self.cidade = valor
+                case "district":
+                    self.bairro = valor
+                case "postal":
+                    self.cep = valor
+                case "uf":
+                    self.uf = valor
