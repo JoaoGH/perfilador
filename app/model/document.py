@@ -55,3 +55,6 @@ class Document:
         }
 
         return dictionary
+
+    def file_exists(self) -> bool:
+        return os.path.exists(self.path)

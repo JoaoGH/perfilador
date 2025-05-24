@@ -33,7 +33,10 @@ class DocumentManager:
             dao = DocumentoDao()
             documents = dao.list()
             for document in documents:
-                self.files.append(document)
+                if document.file_exists():
+                    self.files.append(document)
+                else:
+                    dao.remove(document.id)
         except Exception as e:
             print(e)
 
