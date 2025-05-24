@@ -1,3 +1,4 @@
+from app.crawler.pdf_crawler import PDFCrawler
 from app.document_manager import DocumentManager
 from app.information_extractor import InformationExtractor
 from app.pre_processor import PreProcessor
@@ -17,6 +18,7 @@ def main():
     manager.load_from_database()
     preprocessor = PreProcessor()
     infoextractor = InformationExtractor()
+    crawler = PDFCrawler()
 
     while True:
         show_menu()
@@ -24,7 +26,9 @@ def main():
         if opc == "1":
             manager.load_pdf()
         elif opc == "2":
-            print("Não implementado")
+            search_query = input("Informe o termo para busca ") or None
+            crawler.run(search_query)
+            manager.load_from_database()
         elif opc == "3":
             preprocessor.execute()
         elif opc == "4":
