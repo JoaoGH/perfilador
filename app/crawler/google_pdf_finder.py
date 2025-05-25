@@ -18,10 +18,6 @@ class GooglePDFFinder:
             "(cpf OR rg) AND (lista OR listagem OR declaração OR declaracao)",
             "(processo OR selecao) AND (lista OR listagem OR declaração OR declaracao)",
         ]
-        self.user_agent = (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-            "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-        )
 
     def search(self, custom_query: Optional[str] = None) -> List[str]:
         """
@@ -43,12 +39,7 @@ class GooglePDFFinder:
             try:
                 print(f"Buscando: {current_query}")
 
-                founded =  search(
-                        current_query,
-                        num_results=self.num_results,
-                        # pause=self.delay,
-                        # user_agent=self.user_agent
-                )
+                founded =  search(current_query, num_results=self.num_results)
 
                 for url in founded:
                     if url != '' and self._is_valid_pdf_url(url):
