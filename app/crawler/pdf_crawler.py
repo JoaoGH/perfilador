@@ -67,6 +67,9 @@ class PDFCrawler:
                     doc.crawler = execucao
                     doc.calculate_hash(use_file_content=True)
                     doc.download_timestamp = result['download_timestamp']
+                    if doc.file_exists() and self.document_dao.exists_by_hash(doc.hash):
+                        os.remove(result['file_path'])
+                        continue
                     self.document_dao.insert(doc)
                     success_downloaded += 1
 
