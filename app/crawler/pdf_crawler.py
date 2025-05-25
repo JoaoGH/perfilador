@@ -1,11 +1,13 @@
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
 from app.crawler.google_pdf_finder import GooglePDFFinder
 from app.crawler.pdf_downloder import PDFDownloader
 from app.dao.crawler_execucoes_dao import CrawlerExecutionDao
 from app.dao.documentos_dao import DocumentoDao
+from app.document_manager import DocumentManager
 from app.model.crawler_execution import CrawlerExecution
 from app.model.document import Document
 
@@ -22,6 +24,7 @@ class PDFCrawler:
         self.downloader = PDFDownloader(directory)
         self.dao = CrawlerExecutionDao()
         self.document_dao = DocumentoDao()
+        self.document_manager = DocumentManager()
 
     def run(self, query: Optional[str] = None) -> None:
         """
@@ -65,7 +68,8 @@ class PDFCrawler:
                     doc.source_url = url
                     doc.search_query = query
                     doc.crawler = execucao
-                    doc.calculate_hash(use_file_content=True)
+                    doc.content = self.document_manager.read_file(Path(result['file_path']))
+                    doc.calculate_hash()
                     doc.download_timestamp = result['download_timestamp']
                     if doc.file_exists() and self.document_dao.exists_by_hash(doc.hash):
                         os.remove(result['file_path'])

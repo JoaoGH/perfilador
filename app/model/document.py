@@ -24,14 +24,8 @@ class Document:
         self.search_query: Optional[str] = ""
         self.download_timestamp: Optional[datetime] = None
 
-    def calculate_hash(self, use_file_content: bool = False) -> None:
-        if use_file_content and os.path.exists(self.path):
-            with open(self.path, "rb") as f:
-                file_content = f.read()
-        else:
-            file_content = self.content.encode()
-
-        self.hash = hashlib.sha256(file_content).hexdigest()
+    def calculate_hash(self) -> None:
+        self.hash = hashlib.sha256(self.content.encode()).hexdigest()
 
     @staticmethod
     def get_table_name() -> str:
