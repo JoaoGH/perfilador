@@ -1,5 +1,6 @@
 import os
 import time
+from datetime import datetime
 from typing import Dict
 from urllib.parse import urlparse
 
@@ -66,6 +67,7 @@ class PDFDownloader:
                     'file_path': filepath,
                     'file_size': os.path.getsize(filepath)
                 })
+                result['download_timestamp'] = datetime.fromtimestamp(time.time())
             else:
                 result['error'] = "Arquivo vazio ou não foi salvo corretamente"
 

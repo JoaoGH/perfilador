@@ -73,6 +73,7 @@ class PDFCrawler:
                     doc.search_query = query
                     doc.crawler = execucao
                     doc.calculate_hash(use_file_content=True)
+                    doc.download_timestamp = result['download_timestamp']
                     self.document_dao.insert(doc)
 
                 else:
