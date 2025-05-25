@@ -86,4 +86,4 @@ class PDFCrawler:
 
             self.dao.update(execucao.id, execucao.to_dict())
 
-        print(f"{execucao.successful_downloads}")
+        print(f"{execucao.successful_downloads} Salvos conforme execucao.")
