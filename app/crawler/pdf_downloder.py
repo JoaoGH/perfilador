@@ -20,10 +20,10 @@ class PDFDownloader:
                          '(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
 
-    def _generate_filename(self) -> str:
-        return f"{int(time.time())}.pdf"
+    def _generate_filename(self, execucao_id: int) -> str:
+        return f"{execucao_id}_{int(time.time())}.pdf"
 
-    def download(self, url: str) -> Dict:
+    def download(self, url: str, execucao_id: int) -> Dict:
         """
         Baixa um arquivo PDF da URL fornecida.
 
@@ -53,7 +53,7 @@ class PDFDownloader:
                 return result
 
             # cria o nome do arquivo
-            filename = self._generate_filename()
+            filename = self._generate_filename(execucao_id)
             filepath = os.path.join(self.directory, filename)
 
             with open(filepath, "wb") as f:
