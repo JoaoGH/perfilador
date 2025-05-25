@@ -28,6 +28,7 @@ class DocumentManager:
                 raise FileNotFoundError(f"Diretório não encontrado '{self.pdf_folder}'")
 
     def load_from_database(self) -> None:
+        print("Iniciar leitura de arquivos do banco de dados.")
 
         try:
             dao = DocumentoDao()
@@ -40,6 +41,7 @@ class DocumentManager:
         except Exception as e:
             print(e)
 
+        print("Leitura finalizada.")
         return
 
     def load_pdf(self) -> None:
