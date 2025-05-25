@@ -40,7 +40,7 @@ class PDFCrawler:
         execucao = CrawlerExecution()
         execucao.search_query = query.strip() if query else None
         execucao.start_time = datetime.now()
-        id = self.dao.insert(execucao)
+        execucao.id = self.dao.insert(execucao)
 
         self.stats['start_time'] = execucao.start_time
         query = execucao.search_query
@@ -55,13 +55,13 @@ class PDFCrawler:
                 print("Nenhum PDF encontrado")
                 execucao.end_time = datetime.now()
                 execucao.calculate_duration()
-                self.dao.update(id, execucao.to_dict())
+                self.dao.update(execucao.id, execucao.to_dict())
                 return
 
             print(f"\n{self.stats['total']} PDFs encontrados.")
 
             for url in pdf_urls:
-                result = self.downloader.download(url)
+                result = self.downloader.download(url, execucao.id)
                 if result['success']:
                     self.stats['success'] += 1
                     # criar um doc
@@ -86,7 +86,7 @@ class PDFCrawler:
             execucao.failed_downloads = self.stats['failed']
             execucao.calculate_duration()
 
-            self.dao.update(id, execucao.to_dict())
+            self.dao.update(execucao.id, execucao.to_dict())
             self.stats['end_time'] = execucao.end_time
 
 
