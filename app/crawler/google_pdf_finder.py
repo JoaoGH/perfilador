@@ -5,7 +5,7 @@ from googlesearch import search
 
 
 class GooglePDFFinder:
-    def __init__(self, num_results: int = 10, delay: float = 2.0):
+    def __init__(self, num_results: int = 10, delay: float = 5.0):
         """
         Inicializa o buscador de PDFs no Google.
 
