@@ -76,7 +76,7 @@ class BaseDAO(ABC, Generic[T]):
         """Remove registro no banco"""
 
         query = f"DELETE FROM {self.table_name} WHERE id = {id}"
-        cursor = self.conn.execute(query, (id,))
+        cursor = self.conn.execute(query)
         self.conn.commit()
 
         return cursor.rowcount > 0

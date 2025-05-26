@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+from typing import Optional
 
 from app.dao.base_dao import BaseDAO
 from app.model.document import Document
@@ -13,8 +15,15 @@ class DocumentoDao(BaseDAO[Document]):
         return {
             "tokens": lambda v: json.loads(v) if v else [],
             'pipeline_executed': lambda v: bool(int(v)) if str(v).isdigit() else bool(v),
-            'information_extracted': lambda v: bool(int(v)) if str(v).isdigit() else bool(v)
+            'information_extracted': lambda v: bool(int(v)) if str(v).isdigit() else bool(v),
+            'download_timestamp': self._convert_to_datetime
         }
+
+    def _convert_to_datetime(self, value: str) -> Optional[datetime]:
+        """Converte string ISO para datetime"""
+        if not value:
+            return None
+        return datetime.fromisoformat(value) if isinstance(value, str) else value
 
     def exists_by_hash(self, document_hash: str) -> bool:
         """Verifica se já existe um documento com o hash especificado cadastrado
