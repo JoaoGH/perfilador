@@ -54,7 +54,11 @@ class InformationExtractor:
         if not document.normalized:
             return []
 
-        entities = self.ner_pipeline(document.normalized)
+        entities = []
+
+        pages = document.normalized.split(self.document_manager.PAGE_SEPARATOR)
+        for chunk in pages:
+            entities.extend(self.ner_pipeline(chunk))
 
         entities = self.merge_adjacent_entities(entities)
 

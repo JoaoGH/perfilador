@@ -35,6 +35,8 @@ class PreProcessor:
 
         text = re.sub(r"\s+", " ", text)
 
+        text = text.replace("|quebra pagina|", self.document_manager.PAGE_SEPARATOR)
+
         return text
 
     def normalize(self, text: str) -> str:

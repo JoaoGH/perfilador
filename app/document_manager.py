@@ -12,6 +12,7 @@ from app.model.document import Document
 class DocumentManager:
     _instance = None
     _initialized = False
+    PAGE_SEPARATOR = "\n|QUEBRA_PAGINA|\n"
 
     def __new__(cls, pdf_folder: str = "resources/pdf"):
         if cls._instance is None:
@@ -110,7 +111,7 @@ class DocumentManager:
             text = ""
             with fitz.open(path) as doc:
                 for page in doc:
-                    text += page.get_text("text") + "\n"
+                    text += page.get_text("text") + self.PAGE_SEPARATOR
 
             text = self.remover_anuncios(text)
 
