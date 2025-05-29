@@ -1,5 +1,7 @@
 import re
 import unicodedata
+from typing import List
+
 import nltk
 
 from app.dao.documentos_dao import DocumentoDao
@@ -82,6 +84,9 @@ class PreProcessor:
             print(f"Erro ao tokenizar: {str(e)}")
             return []
 
+    def split_into_pages(self, text: str) -> List[str]:
+        return text.split(self.document_manager.PAGE_SEPARATOR)
+
     def execute(self) -> None:
         for file in self.document_manager.files:
             self.execute_by_document(file)
@@ -93,6 +98,7 @@ class PreProcessor:
         document.clean = self.clear(document.content)
         document.normalized = self.normalize(document.clean)
         document.tokens = self.tokenize(document.normalized)
+        document.pages = self.split_into_pages(document.normalized)
 
         if document.clean and document.normalized and document.tokens:
             dao = DocumentoDao()
