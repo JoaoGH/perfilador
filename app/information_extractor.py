@@ -56,7 +56,7 @@ class InformationExtractor:
 
         entities = []
 
-        pages = document.normalized.split(self.document_manager.PAGE_SEPARATOR)
+        pages = document.pages
         for chunk in pages:
             entities.extend(self.ner_pipeline(chunk))
 

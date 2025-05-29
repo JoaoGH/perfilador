@@ -13,7 +13,7 @@ class DocumentoDao(BaseDAO[Document]):
 
     def _get_conversion_map(self) -> dict:
         return {
-            "tokens": lambda v: json.loads(v) if v else [],
+            "pages": lambda v: json.loads(v) if v else [],
             'pipeline_executed': lambda v: bool(int(v)) if str(v).isdigit() else bool(v),
             'information_extracted': lambda v: bool(int(v)) if str(v).isdigit() else bool(v),
             'download_timestamp': self._convert_to_datetime
