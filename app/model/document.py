@@ -15,7 +15,6 @@ class Document:
         self.content: str = ""
         self.clean: str = ""
         self.normalized: str = ""
-        self.tokens: List[str] = []
         self.pages: List[str] = []
         self.pipeline_executed: bool = False
         self.information_extracted: bool = False
@@ -39,7 +38,6 @@ class Document:
             "content": self.content,
             "clean": self.clean,
             "normalized": self.normalized,
-            "tokens": json.dumps(self.tokens),
             "pages": json.dumps(self.pages),
             "pipeline_executed": int(self.pipeline_executed),
             "information_extracted": int(self.information_extracted),

@@ -59,31 +59,6 @@ class PreProcessor:
 
         return text
 
-    def tokenize(self, text: str) -> list:
-        """Tokeniza o conteudo usando NLTK"""
-
-        if not text:
-            return []
-
-        try:
-            regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-            emails = re.findall(regex_email, text)
-            protected_text = re.sub(regex_email, '||EMAIL||', text)
-
-            content = nltk.word_tokenize(protected_text)
-
-            email_index = 0
-
-            for token in content:
-                if token == '||EMAIL||':
-                    content[content.index(token)] = emails[email_index]
-                    email_index += 1
-
-            return content
-        except Exception as e:
-            print(f"Erro ao tokenizar: {str(e)}")
-            return []
-
     def split_into_pages(self, text: str) -> List[str]:
         return text.split(self.document_manager.PAGE_SEPARATOR)
 
@@ -97,10 +72,9 @@ class PreProcessor:
 
         document.clean = self.clear(document.content)
         document.normalized = self.normalize(document.clean)
-        document.tokens = self.tokenize(document.normalized)
         document.pages = self.split_into_pages(document.normalized)
 
-        if document.clean and document.normalized and document.tokens:
+        if document.clean and document.normalized:
             dao = DocumentoDao()
             document.pipeline_executed = True
             dao.update(document.id, document.to_dict())
