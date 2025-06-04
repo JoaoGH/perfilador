@@ -34,10 +34,35 @@ de pessoas a partir de dados públicos.
 
 ```text
 1. Coleta de dados      → Identificação de fontes confiáveis e coleta de informações
-2. Pré-processamento    → Limpeza, tokenização e normalização de textos
+2. Pré-processamento    → Limpeza, normalização e quebra em páginas de textos
 3. Extração de dados    → Named Entity Recognition and Classification (NERC) e Relation Extraction
 4. Avaliações           → Avaliação do Modelo e Avaliação de Remontagem de Identidade
 ```
+
+
+## Instalação
+
+Recomenda-se o uso de um ambiente virtual. Para instalar as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+> Importante: o projeto utiliza a biblioteca `nltk`. Na primeira execução, será necessário baixar o pacote `punkt`:
+```python
+import nltk
+nltk.download('punkt')
+```
+
+## Execução
+
+Para executar o pipeline principal:
+
+```bash
+python main.py
+```
+
+---
 
 
 ## Aviso Legal
