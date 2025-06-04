@@ -1,0 +1,7 @@
+requests
+spacy
+pdfminer.six
+PyMuPDF
+nltk
+googlesearch-python
+transformers
