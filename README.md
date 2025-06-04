@@ -49,10 +49,25 @@ pip install -r requirements.txt
 ```
 
 > Importante: o projeto utiliza a biblioteca `nltk`. Na primeira execução, será necessário baixar o pacote `punkt`:
+
 ```python
 import nltk
 nltk.download('punkt')
 ```
+
+## Criação do banco de dados
+
+O projeto utiliza SQLite como base de dados.
+
+Para inicializar o banco:
+
+```bash
+sqlite3 database/perfilador.sqlite < database/schema.sql
+```
+
+- Altere o caminho conforme o local desejado.
+- O script `schema.sql` está localizado em `database/schema.sql`.
+- O arquivo `.db` será criado automaticamente com as tabelas corretas.
 
 ## Execução
 
