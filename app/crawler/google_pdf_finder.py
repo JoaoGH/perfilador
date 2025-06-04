@@ -1,5 +1,5 @@
 import time
-from typing import List, Optional, Set
+from typing import List, Optional, Tuple
 
 from googlesearch import search
 
@@ -19,15 +19,15 @@ class GooglePDFFinder:
             "(processo OR selecao) AND (lista OR listagem OR declaração OR declaracao)",
         ]
 
-    def search(self, custom_query: Optional[str] = None) -> List[str]:
+    def search(self, custom_query: Optional[str] = None) -> List[Tuple[str, str]]:
         """
         Busca URLs de PDFs no Google baseado nas queries.
 
         :param custom_query: Query personalizada para adicionar às queries base
-        :return: Lista de URLs de PDFs encontrados
+        :return: Lista de tuplas (URL do PDF, Query utilizada)
         """
 
-        urls: Set[str] = set()
+        results: List[Tuple[str, str]] = []
         FILE_TYPE = " filetype:pdf"
 
         for base_query in self.base_queries:
@@ -43,12 +43,13 @@ class GooglePDFFinder:
 
                 for url in founded:
                     if url != '' and self._is_valid_pdf_url(url):
-                        urls.add(url)
+                        results.append((url, current_query))
                 time.sleep(self.delay)
+
             except Exception as e:
                 print(e)
 
-        return list(urls)
+        return results
 
     def _is_valid_pdf_url(self, url: str) -> bool:
         """Verifica se a URL aponta para um PDF"""
