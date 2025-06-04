@@ -40,6 +40,31 @@ de pessoas a partir de dados públicos.
 ```
 
 
+## Instalação
+
+Recomenda-se o uso de um ambiente virtual. Para instalar as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+> Importante: o projeto utiliza a biblioteca `nltk`. Na primeira execução, será necessário baixar o pacote `punkt`:
+```python
+import nltk
+nltk.download('punkt')
+```
+
+## Execução
+
+Para executar o pipeline principal:
+
+```bash
+python main.py
+```
+
+---
+
+
 ## Aviso Legal
 
 Este projeto é exclusivamente acadêmico e educativo. 
