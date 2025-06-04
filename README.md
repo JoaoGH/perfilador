@@ -34,7 +34,7 @@ de pessoas a partir de dados públicos.
 
 ```text
 1. Coleta de dados      → Identificação de fontes confiáveis e coleta de informações
-2. Pré-processamento    → Limpeza, tokenização e normalização de textos
+2. Pré-processamento    → Limpeza, normalização e quebra em páginas de textos
 3. Extração de dados    → Named Entity Recognition and Classification (NERC) e Relation Extraction
 4. Avaliações           → Avaliação do Modelo e Avaliação de Remontagem de Identidade
 ```
