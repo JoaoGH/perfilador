@@ -58,8 +58,8 @@ class PDFDownloader:
             filepath = os.path.join(self.directory, filename)
 
             with open(filepath, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                content = response.content
+                f.write(content)
 
             if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
                 result.update({
