@@ -26,7 +26,7 @@ def main():
         if opc == "1":
             manager.load_pdf()
         elif opc == "2":
-            search_query = input("Informe o termo para busca ") or None
+            search_query = input("Informe o termo para busca: ") or None
             crawler.run(search_query)
             manager.load_from_database()
         elif opc == "3":
