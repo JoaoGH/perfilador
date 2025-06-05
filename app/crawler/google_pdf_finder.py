@@ -3,6 +3,8 @@ from typing import List, Optional, Tuple
 
 from googlesearch import search
 
+from app.utils.loading import Loading
+
 
 class GooglePDFFinder:
     def __init__(self, num_results: int = 10, delay: float = 5.0):
@@ -30,6 +32,9 @@ class GooglePDFFinder:
         results: List[Tuple[str, str]] = []
         FILE_TYPE = " filetype:pdf"
 
+        loading = Loading("Buscando links")
+        loading.start()
+
         for base_query in self.base_queries:
             current_query = base_query
             if custom_query:
@@ -37,7 +42,7 @@ class GooglePDFFinder:
             current_query += FILE_TYPE
 
             try:
-                print(f"Buscando: {current_query}")
+                loading.print_protected(f"Buscando: {current_query}")
 
                 founded =  search(current_query, num_results=self.num_results)
 
@@ -48,6 +53,8 @@ class GooglePDFFinder:
 
             except Exception as e:
                 print(e)
+
+        loading.stop()
 
         return results
 
