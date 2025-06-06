@@ -1,5 +1,6 @@
 import os
 import time
+import uuid
 from datetime import datetime
 from typing import Dict
 from urllib.parse import urlparse
@@ -22,7 +23,7 @@ class PDFDownloader:
         })
 
     def _generate_filename(self, execucao_id: int) -> str:
-        return f"{execucao_id}_{int(time.time())}.pdf"
+        return f"{datetime.fromtimestamp(time.time()).strftime('%Y%m%d%H%M%S')}_{execucao_id}_{uuid.uuid4()}.pdf"
 
     def download(self, url: str, execucao_id: int) -> Dict:
         """
@@ -58,8 +59,8 @@ class PDFDownloader:
             filepath = os.path.join(self.directory, filename)
 
             with open(filepath, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
+                content = response.content
+                f.write(content)
 
             if os.path.exists(filepath) and os.path.getsize(filepath) > 0:
                 result.update({

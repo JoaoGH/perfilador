@@ -10,6 +10,7 @@ from app.dao.documentos_dao import DocumentoDao
 from app.document_manager import DocumentManager
 from app.model.crawler_execution import CrawlerExecution
 from app.model.document import Document
+from app.utils.loading import Loading
 
 
 class PDFCrawler:
@@ -57,7 +58,10 @@ class PDFCrawler:
 
             print(f"\n{len(pdf_urls)} PDFs encontrados.")
 
-            for url in pdf_urls:
+            loading = Loading("Salvando arquivos")
+            loading.start()
+
+            for url, used_query in pdf_urls:
                 result = self.downloader.download(url, execucao.id)
                 if result['success']:
                     # criar um doc
@@ -66,7 +70,7 @@ class PDFCrawler:
                         path=result['file_path']
                     )
                     doc.source_url = url
-                    doc.search_query = query
+                    doc.search_query = used_query
                     doc.crawler = execucao
                     doc.content = self.document_manager.read_file(Path(result['file_path']))
                     doc.calculate_hash()
@@ -79,6 +83,9 @@ class PDFCrawler:
 
                 else:
                     failed_downloaded += 1
+
+
+            loading.stop()
 
         except Exception as e:
             print(f"Erro durante busca: {e}")
