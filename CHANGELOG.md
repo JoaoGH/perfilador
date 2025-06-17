@@ -5,7 +5,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
 e este projeto segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
-## [Não Publicado]
+## [1.0.0] - 2025-06-16
 
 ### Adicionado
 - Implementação inicial do projeto com carregamento de arquivos e extração de informações.
@@ -48,3 +48,4 @@ e este projeto segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 ### Documentação
 - Adicionar criação do banco de dados pelo schema no [README](./README.md#criação-do-banco-de-dados)
 
+[1.0.0]: https://github.com/JoaoGH/perfilador/releases/tag/v1.0.0
